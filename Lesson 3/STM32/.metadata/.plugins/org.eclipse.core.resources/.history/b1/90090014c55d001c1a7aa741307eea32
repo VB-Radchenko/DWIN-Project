@@ -1,0 +1,1162 @@
+//==============================================================================
+//---------------------------------Includes-------------------------------------
+//==============================================================================
+#include "DWIN_APP.h"
+#include "DWIN.h"
+#include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#include "usart.h"
+#include "rtc.h"
+//==============================================================================
+//---------------------------------Defines--------------------------------------
+//==============================================================================
+#define AttemptsPass 6
+#define MIN_TIME_BRUSH 10
+#define VALUE_ICON_WARNING 5
+//==============================================================================
+//--------------------------------Variables-------------------------------------
+//==============================================================================
+uint8_t fisrtStartDWIN = 0;
+uint32_t password = 0;
+uint8_t secondOld = 0;
+uint8_t minutesOld = 0;
+uint8_t passwordTimer = 0;
+uint8_t secondOldPassTimer = 0;
+
+uint32_t passwordService = 587502;
+uint32_t passwordPay = 54321;
+uint8_t flagSaveTimeAndDate = 0;
+struct workStateVacuM_P workStateVacuM;
+struct saveToFlashData_P saveToFlashData;
+
+struct dateAndTimeSaveVariable_P
+{
+  uint8_t year;
+  uint8_t month;
+  uint8_t date;
+  uint8_t hours;
+  uint8_t minutes;
+};
+
+struct dateAndTimeSaveVariable_P dateAndTimeSaveVariable;
+
+struct Page0_P
+{
+  uint16_t StartWork;
+} Page0;
+
+struct Page1_P
+{
+  uint16_t GoToProcedure;
+  uint16_t GoToSettingsMenu;
+  uint16_t passAddress;
+} Page1;
+
+struct Page2_P
+{
+  uint16_t GoToSettings;
+  uint16_t GoToCounter;
+  uint16_t GoToCalendar;
+} Page2;
+
+struct Page3_P
+{
+  uint16_t ResetCounter;
+} Page3;
+struct Page4_P
+{
+  uint16_t YearP;
+  uint16_t YearM;
+  uint16_t MonthP;
+  uint16_t MonthM;
+  uint16_t DateP;
+  uint16_t DateM;
+  uint16_t HoursP;
+  uint16_t HoursM;
+  uint16_t MinutesP;
+  uint16_t MinutesM;
+  uint16_t YearPLong;
+  uint16_t YearMLong;
+  uint16_t MonthPLong;
+  uint16_t MonthMLong;
+  uint16_t DatePLong;
+  uint16_t DateMLong;
+  uint16_t HoursPLong;
+  uint16_t HoursMLong;
+  uint16_t MinutesPLong;
+  uint16_t MinutesMLong;
+  uint16_t GoToPage2;
+} Page4;
+
+struct Page5_P
+{
+  uint16_t Play;
+  uint16_t Pause;
+  uint16_t Stop;
+  uint16_t PowerP;
+  uint16_t PowerM;
+  uint16_t TimeWorkP;
+  uint16_t TimeWorkM;
+  uint16_t PowerPLong;
+  uint16_t PowerMLong;
+  uint16_t TimeWorkPLong;
+  uint16_t TimeWorkMLong;
+  uint16_t GoToPage1;
+} Page5;
+
+struct Page6_P
+{
+
+  uint16_t GoToPage1;
+  uint16_t resetData;
+  uint16_t monthToPay;
+  uint32_t serialNumberRead;
+} Page6;
+
+struct Page7_P
+{
+  uint16_t TimeWorkM;
+  uint16_t TimeWorkP;
+  uint16_t TimeWorkMLong;
+  uint16_t TimeWorkPLong;
+  uint16_t LedM;
+  uint16_t LedP;
+  uint16_t LedMLong;
+  uint16_t LedPLong;
+  uint16_t GoToPage2;
+  uint16_t GoToLedPage;
+} Page7;
+
+struct Page13_P
+{
+  uint16_t ChekPassword;
+  uint16_t passAddress;
+} Page13;
+
+struct Page15_P
+{
+  uint16_t GoToPage7;
+  
+} Page15;
+
+struct commandSynchrodataDWIN_P
+{
+  
+  struct Page0_P Page0;
+  struct Page1_P Page1;
+  struct Page2_P Page2;
+  struct Page3_P Page3;
+  struct Page4_P Page4;
+  struct Page5_P Page5;
+  struct Page6_P Page6;
+  struct Page7_P Page7;
+  struct Page13_P Page13;
+  struct Page15_P Page15;
+  
+};
+struct commandSynchrodataDWIN_P commandSynchrodataDWIN;
+
+
+struct addressesAndVariablesDWIN_P
+{
+    uint16_t passwordAddressDWIN;
+    uint16_t passwordVariableDWIN;
+    
+    uint16_t workingTimeBrushesAddressDWIN;
+    uint16_t workingTimeBrushesVariableDWIN;
+    
+    uint16_t totalWorkTimeAddressDWIN;
+    uint32_t totalWorkTimeVariableDWIN;
+    
+    uint16_t serialNumberAddressDWIN;
+    uint32_t serialNumberVariableDWIN;
+    
+    uint16_t timeOfWorkMinutesDefaultAddressDWIN;
+    uint16_t timeOfWorkMinutesDefaultVariableDWIN;
+    
+    uint16_t timeOfWorkMinutesActualAddressDWIN;
+    uint16_t timeOfWorkMinutesActualVariableDWIN;
+    
+    uint16_t timeOfWorkSecondsActualAddressDWIN;
+    uint16_t timeOfWorkSecondsActualVariableDWIN;
+    
+    uint16_t powerOfWorkAddressDWIN;
+    uint16_t powerOfWorkVariableDWIN;
+    
+    uint16_t monthPayAddressDWIN;
+    uint16_t monthPayVariableDWIN;
+    
+    uint16_t ledPowerAddressDWIN;
+    uint16_t ledPowerVariableDWIN;
+    
+    uint16_t attemptsPasswordAddressDWIN;
+    uint16_t attemptsPasswordVariableDWIN;
+    
+    uint16_t attemptsPasswordIconWarningAddressDWIN;
+    uint16_t attemptsPasswordIconWarningVariableDWIN;
+    
+    uint16_t attemptsPasswordTimeAddressDWIN;
+    uint16_t attemptsPasswordTimeVariableDWIN;
+    
+    uint16_t passwordServiceAddressDWIN;
+    uint16_t passwordServiceVariableDWIN;
+    
+    uint16_t dateYearAddressDWIN;
+    uint16_t dateYearVariableDWIN;
+    uint16_t dateMonthAddressDWIN;
+    uint16_t dateMonthVariableDWIN;
+    uint16_t dateDateAddressDWIN;
+    uint16_t dateDateVariableDWIN;
+    
+    uint16_t timeHoursAddressDWIN;
+    uint16_t timeHoursVariableDWIN;
+    uint16_t timeMinutesAddressDWIN;
+    uint16_t timeMinutesVariableDWIN;
+    
+    
+    uint16_t dateYearAddressSetDWIN;
+    uint16_t dateYearVariableSetDWIN;
+    uint16_t dateMonthAddressSetDWIN;
+    uint16_t dateMonthVariableSetDWIN;
+    uint16_t dateDateAddressSetDWIN;
+    uint16_t dateDateVariableSetDWIN;
+    
+    uint16_t timeHoursAddressSetDWIN;
+    uint16_t timeHoursVariableSetDWIN;
+    uint16_t timeMinutesAddressSetDWIN;
+    uint16_t timeMinutesVariableSetDWIN;
+    
+    
+    
+  //  uint16_t AddressDWIN;
+  //  uint32_t VariableDWIN;
+    
+};
+struct addressesAndVariablesDWIN_P addressesAndVariablesDWIN;
+
+
+extern struct readDataDWIN_P readDataDWIN;
+//extern struct saveToFlashData_P saveToFlashData;
+RTC_TimeTypeDef timeDWIN;
+RTC_DateTypeDef dateDWIN;
+//==============================================================================
+//--------------------------------PROTOTYPE-------------------------------------
+//==============================================================================
+
+
+//==============================================================================
+//--------------------------------FUNCTIONS-------------------------------------
+//==============================================================================
+
+
+//==============================================================================
+//-------------------------------Save to RTC------------------------------------
+//==============================================================================
+  RTC_TimeTypeDef sTime;
+  RTC_DateTypeDef sDate;
+  
+void saveTimeAndDataToRTC(uint8_t yy,uint8_t mm, uint8_t dd, uint8_t hh, uint8_t min)
+{
+  sDate.Month = mm;
+  sDate.Date = dd;
+  sDate.Year = yy;
+  sTime.Hours = hh;
+  sTime.Minutes = min;
+  sTime.Seconds = 00;
+  sTime.DayLightSaving = RTC_DAYLIGHTSAVING_NONE;
+  sTime.StoreOperation = RTC_STOREOPERATION_RESET;
+  
+  if (HAL_RTC_SetTime(&hrtc, &sTime, RTC_FORMAT_BIN) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+  if (HAL_RTC_SetDate(&hrtc, &sDate, RTC_FORMAT_BIN) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+}
+
+//==============================================================================
+//---------------------------preset variable DWIN-------------------------------
+//==============================================================================
+
+void dataPresetSynchrodata()
+{
+  
+  commandSynchrodataDWIN.Page0.StartWork        = 0x0001;
+  
+  commandSynchrodataDWIN.Page1.GoToProcedure    = 0x0105;
+  commandSynchrodataDWIN.Page1.GoToSettingsMenu = 0x0102;
+  commandSynchrodataDWIN.Page1.passAddress      = 0x0113;
+  
+  commandSynchrodataDWIN.Page2.GoToCalendar     = 0x0204;
+  commandSynchrodataDWIN.Page2.GoToCounter      = 0x0203;
+  commandSynchrodataDWIN.Page2.GoToSettings     = 0x0207;
+  
+  commandSynchrodataDWIN.Page3.ResetCounter     = 0x0301;
+  
+  commandSynchrodataDWIN.Page4.GoToPage2        = 0x0401;
+  commandSynchrodataDWIN.Page4.DateM            = 0x0407;
+  commandSynchrodataDWIN.Page4.DateP            = 0x0406;
+  commandSynchrodataDWIN.Page4.HoursM           = 0x0409;
+  commandSynchrodataDWIN.Page4.HoursP           = 0x0408;
+  commandSynchrodataDWIN.Page4.MinutesM         = 0x040B;
+  commandSynchrodataDWIN.Page4.MinutesP         = 0x040A;
+  commandSynchrodataDWIN.Page4.MonthM           = 0x0405;
+  commandSynchrodataDWIN.Page4.MonthP           = 0x0404;
+  commandSynchrodataDWIN.Page4.YearM            = 0x0403;
+  commandSynchrodataDWIN.Page4.YearP            = 0x0402;
+  commandSynchrodataDWIN.Page4.DateMLong        = 0x0417;
+  commandSynchrodataDWIN.Page4.DatePLong        = 0x0416;
+  commandSynchrodataDWIN.Page4.HoursMLong       = 0x0419;
+  commandSynchrodataDWIN.Page4.HoursPLong       = 0x0418;
+  commandSynchrodataDWIN.Page4.MinutesMLong     = 0x041B;
+  commandSynchrodataDWIN.Page4.MinutesPLong     = 0x041A;
+  commandSynchrodataDWIN.Page4.MonthMLong       = 0x0415;
+  commandSynchrodataDWIN.Page4.MonthPLong       = 0x0414;
+  commandSynchrodataDWIN.Page4.YearMLong        = 0x0413;
+  commandSynchrodataDWIN.Page4.YearPLong        = 0x0412;
+  
+  commandSynchrodataDWIN.Page5.GoToPage1        = 0x050E;
+  commandSynchrodataDWIN.Page5.Pause            = 0x050B;
+  commandSynchrodataDWIN.Page5.Play             = 0x050C;
+  commandSynchrodataDWIN.Page5.PowerM           = 0x0503;
+  commandSynchrodataDWIN.Page5.PowerP           = 0x0504;
+  commandSynchrodataDWIN.Page5.Stop             = 0x050D;
+  commandSynchrodataDWIN.Page5.TimeWorkM        = 0x0501;
+  commandSynchrodataDWIN.Page5.TimeWorkP        = 0x0505;
+  commandSynchrodataDWIN.Page5.PowerMLong       = 0x0513;
+  commandSynchrodataDWIN.Page5.PowerPLong       = 0x0514;
+  commandSynchrodataDWIN.Page5.TimeWorkMLong    = 0x0511;
+  commandSynchrodataDWIN.Page5.TimeWorkPLong    = 0x0515;
+  
+  commandSynchrodataDWIN.Page6.GoToPage1        = 0x0601;   
+  commandSynchrodataDWIN.Page6.resetData        = 0x0602;
+  commandSynchrodataDWIN.Page6.monthToPay       = 0x5601;
+  commandSynchrodataDWIN.Page6.serialNumberRead = 0x5320;
+  
+  commandSynchrodataDWIN.Page7.GoToPage2        = 0x0700;
+  commandSynchrodataDWIN.Page7.LedM             = 0x0707;
+  commandSynchrodataDWIN.Page7.LedP             = 0x0709;
+  commandSynchrodataDWIN.Page7.LedMLong         = 0x0708;
+  commandSynchrodataDWIN.Page7.LedPLong         = 0x070A;
+  commandSynchrodataDWIN.Page7.TimeWorkM        = 0x0701;
+  commandSynchrodataDWIN.Page7.TimeWorkP        = 0x0705;
+  commandSynchrodataDWIN.Page7.TimeWorkMLong    = 0x0702;
+  commandSynchrodataDWIN.Page7.TimeWorkPLong    = 0x0706;
+  commandSynchrodataDWIN.Page7.GoToLedPage      = 0x070B;
+  
+  commandSynchrodataDWIN.Page13.ChekPassword    = 0x5D23;
+  commandSynchrodataDWIN.Page13.passAddress     = 0x5D13;
+  
+  commandSynchrodataDWIN.Page15.GoToPage7       = 0x0A01; 
+
+}
+//==============================================================================
+//---------------------------First Read Flash Struct----------------------------
+//==============================================================================
+void FirstreadFlashData()
+{
+  readSaveData(&saveToFlashData);
+  if ((saveToFlashData.blockedForNonPayment == 0xFF)||(saveToFlashData.ledBrightnessSleep == 0xFF)||(saveToFlashData.monthPay == 0xFF)||(saveToFlashData.timeWorksBrushes == 0xFFFF))
+  {
+    saveToFlashData.blockedForNonPayment = 0;
+    saveToFlashData.ledBrightnessSleep = 25;
+    saveToFlashData.ledBrightnessWork = 100;
+    saveToFlashData.monthPay = 12;
+    saveToFlashData.passwordAttempts = AttemptsPass;
+    saveToFlashData.powerOfWork = 0;
+    saveToFlashData.serialNumber = 0;
+    saveToFlashData.timeAllWork = 0;
+    saveToFlashData.timeOfWorkMinutes = 10;
+    saveToFlashData.timeWorksBrushes = 5;
+    saveDataToFlash(&saveToFlashData);
+    readSaveData(&saveToFlashData);
+  }
+}
+//==============================================================================
+//------------------------------Read Flash Struct-------------------------------
+//==============================================================================
+void readFlashData()
+{
+  readSaveData(&saveToFlashData);
+   FirstreadFlashData();
+  workStateVacuM.minutes = saveToFlashData.timeOfWorkMinutes;
+  addressesAndVariablesDWIN.workingTimeBrushesVariableDWIN = saveToFlashData.timeWorksBrushes;
+}
+
+//==============================================================================
+//------------------------preset variable Page 1 DWIN---------------------------
+//==============================================================================
+void dataPresetPage1DWIN()
+{
+    addressesAndVariablesDWIN.passwordServiceAddressDWIN = 0x5600;
+    addressesAndVariablesDWIN.passwordServiceVariableDWIN = 0;
+}
+//==============================================================================
+//------------------------preset variable Page 3 DWIN---------------------------
+//==============================================================================
+void dataPresetPage3DWIN()
+{
+    addressesAndVariablesDWIN.workingTimeBrushesAddressDWIN = 0x5310;
+    addressesAndVariablesDWIN.workingTimeBrushesVariableDWIN = saveToFlashData.timeWorksBrushes; // ��������� �� ���� ������
+    //addressesAndVariablesDWIN.workingTimeBrushesVariableDWIN = 5; // ��������� �� ���� ������
+    addressesAndVariablesDWIN.totalWorkTimeAddressDWIN = 0x5300;
+    addressesAndVariablesDWIN.totalWorkTimeVariableDWIN = saveToFlashData.timeAllWork; // ��������� �� ���� ������
+}
+//==============================================================================
+//------------------------preset variable Page 4 DWIN---------------------------
+//==============================================================================
+void dataPresetPage4DWIN()
+{
+    addressesAndVariablesDWIN.dateYearAddressDWIN = 0x5410;
+    addressesAndVariablesDWIN.dateYearVariableDWIN = dateDWIN.Year;
+    addressesAndVariablesDWIN.dateMonthAddressDWIN = 0x5412;
+    addressesAndVariablesDWIN.dateMonthVariableDWIN = dateDWIN.Month;
+    addressesAndVariablesDWIN.dateDateAddressDWIN = 0x5414;
+    addressesAndVariablesDWIN.dateDateVariableDWIN = dateDWIN.Date;
+    
+    addressesAndVariablesDWIN.timeHoursAddressDWIN = 0x5416;
+    addressesAndVariablesDWIN.timeHoursVariableDWIN = timeDWIN.Hours;
+    addressesAndVariablesDWIN.timeMinutesAddressDWIN = 0x5418;
+    addressesAndVariablesDWIN.timeMinutesVariableDWIN = timeDWIN.Minutes;
+    
+    addressesAndVariablesDWIN.dateYearAddressSetDWIN = 0x5420;
+    addressesAndVariablesDWIN.dateYearVariableSetDWIN = dateDWIN.Year;
+    addressesAndVariablesDWIN.dateMonthAddressSetDWIN = 0x5422;
+    addressesAndVariablesDWIN.dateMonthVariableSetDWIN = dateDWIN.Month;
+    addressesAndVariablesDWIN.dateDateAddressSetDWIN = 0x5424;
+    addressesAndVariablesDWIN.dateDateVariableSetDWIN = dateDWIN.Date;
+    
+    addressesAndVariablesDWIN.timeHoursAddressSetDWIN = 0x5426;
+    addressesAndVariablesDWIN.timeHoursVariableSetDWIN = timeDWIN.Hours;
+    addressesAndVariablesDWIN.timeMinutesAddressSetDWIN = 0x5428;
+    addressesAndVariablesDWIN.timeMinutesVariableSetDWIN = timeDWIN.Minutes;
+  
+}
+//==============================================================================
+//------------------------preset variable Page 5 DWIN---------------------------
+//==============================================================================
+void dataPresetPage5DWIN()
+{
+    addressesAndVariablesDWIN.timeOfWorkMinutesActualAddressDWIN = 0x5505;
+    addressesAndVariablesDWIN.timeOfWorkMinutesActualVariableDWIN = addressesAndVariablesDWIN.timeOfWorkMinutesDefaultVariableDWIN;
+    addressesAndVariablesDWIN.timeOfWorkSecondsActualAddressDWIN = 0x5507;
+    addressesAndVariablesDWIN.timeOfWorkSecondsActualVariableDWIN = 0x0000;
+    addressesAndVariablesDWIN.powerOfWorkAddressDWIN = 0x5509;
+    addressesAndVariablesDWIN.powerOfWorkVariableDWIN = saveToFlashData.powerOfWork; // ��������� �� ���� ������
+}
+//==============================================================================
+//------------------------preset variable Page 6 DWIN---------------------------
+//==============================================================================
+void dataPresetPage6DWIN()
+{
+    addressesAndVariablesDWIN.serialNumberAddressDWIN = 0x5320;
+    addressesAndVariablesDWIN.serialNumberVariableDWIN = saveToFlashData.serialNumber; // ��������� �� ���� ������
+    addressesAndVariablesDWIN.monthPayAddressDWIN = 0x5601;
+    addressesAndVariablesDWIN.monthPayVariableDWIN = saveToFlashData.monthPay;  // ��������� �� ���� ������
+}
+//==============================================================================
+//------------------------preset variable Page 7 DWIN---------------------------
+//==============================================================================
+void dataPresetPage7DWIN()
+{
+    addressesAndVariablesDWIN.timeOfWorkMinutesDefaultAddressDWIN = 0x5710;
+    addressesAndVariablesDWIN.timeOfWorkMinutesDefaultVariableDWIN = saveToFlashData.timeOfWorkMinutes; // ��������� �� ���� ������
+    addressesAndVariablesDWIN.ledPowerAddressDWIN = 0x0082;
+    addressesAndVariablesDWIN.ledPowerVariableDWIN = (saveToFlashData.ledBrightnessWork<<8 | saveToFlashData.ledBrightnessSleep); // ��������� �� ���� ������ 
+}
+//==============================================================================
+//------------------------preset variable Page 13 DWIN---------------------------
+//==============================================================================
+void dataPresetPage13DWIN()
+{
+    addressesAndVariablesDWIN.passwordAddressDWIN = 0x5D13;
+    addressesAndVariablesDWIN.passwordVariableDWIN = 0x00000000;
+    addressesAndVariablesDWIN.attemptsPasswordAddressDWIN = 0x5D10;
+    addressesAndVariablesDWIN.attemptsPasswordVariableDWIN = saveToFlashData.passwordAttempts; // ��������� �� ���� ������
+   
+    addressesAndVariablesDWIN.attemptsPasswordIconWarningAddressDWIN = 0x5D00;
+    addressesAndVariablesDWIN.attemptsPasswordIconWarningVariableDWIN = 0x0000; // ��������� �� ���� ������
+    addressesAndVariablesDWIN.attemptsPasswordTimeAddressDWIN = 0x5D01;
+    addressesAndVariablesDWIN.attemptsPasswordTimeVariableDWIN = 0x0000; // ��������� �� ���� ������
+}
+//==============================================================================
+//------------------------preset variable Page 15 DWIN---------------------------
+//==============================================================================
+void dataPresetPage15DWIN()
+{
+  ;
+}
+//==============================================================================
+//--------------------------------test Dwin-------------------------------------
+//==============================================================================
+void warningIconPassword(uint8_t attempt)
+{
+  if (attempt <= VALUE_ICON_WARNING)
+  {
+    writeHalfWordDWIN( addressesAndVariablesDWIN.attemptsPasswordIconWarningAddressDWIN,0x0001);
+    parsingDWIN();;
+  }
+  else 
+  {    
+    writeHalfWordDWIN( addressesAndVariablesDWIN.attemptsPasswordIconWarningAddressDWIN,0x0000);
+    parsingDWIN();;
+  }
+ 
+}
+
+//==============================================================================
+//---------------------------preset variable DWIN-------------------------------
+//==============================================================================
+
+
+void dataPresetAllPageDWIN()
+{
+    readFlashData(); 
+    dataPresetSynchrodata();
+    HAL_RTC_GetTime(&hrtc, &timeDWIN, RTC_FORMAT_BIN); // RTC_FORMAT_BIN , RTC_FORMAT_BCD
+    HAL_RTC_GetDate(&hrtc, &dateDWIN, RTC_FORMAT_BIN);
+
+    dataPresetPage1DWIN();
+    dataPresetPage3DWIN();
+    dataPresetPage4DWIN();
+    dataPresetPage5DWIN();
+    dataPresetPage6DWIN();
+    dataPresetPage7DWIN();
+    dataPresetPage13DWIN();
+    dataPresetPage15DWIN();
+}
+
+//==============================================================================
+//----------------------send preset variable DWIN-------------------------------
+//==============================================================================
+void SendPresetDWIN()
+{
+    dataPresetAllPageDWIN();
+    writeWordDWIN( addressesAndVariablesDWIN.passwordAddressDWIN,                   addressesAndVariablesDWIN.passwordVariableDWIN);
+    parsingDWIN();
+    writeHalfWordDWIN( addressesAndVariablesDWIN.workingTimeBrushesAddressDWIN,         addressesAndVariablesDWIN.workingTimeBrushesVariableDWIN);
+    parsingDWIN();
+    writeHalfWordDWIN( addressesAndVariablesDWIN.attemptsPasswordTimeAddressDWIN,         addressesAndVariablesDWIN.attemptsPasswordTimeVariableDWIN);
+    parsingDWIN();
+    writeHalfWordDWIN( addressesAndVariablesDWIN.timeOfWorkMinutesDefaultAddressDWIN,   addressesAndVariablesDWIN.timeOfWorkMinutesDefaultVariableDWIN);
+    parsingDWIN();
+    writeHalfWordDWIN( addressesAndVariablesDWIN.timeOfWorkMinutesActualAddressDWIN,    addressesAndVariablesDWIN.timeOfWorkMinutesActualVariableDWIN);
+    parsingDWIN();
+    writeHalfWordDWIN( addressesAndVariablesDWIN.timeOfWorkSecondsActualAddressDWIN,    addressesAndVariablesDWIN.timeOfWorkSecondsActualVariableDWIN);
+    parsingDWIN();
+    writeHalfWordDWIN( addressesAndVariablesDWIN.powerOfWorkAddressDWIN,                addressesAndVariablesDWIN.powerOfWorkVariableDWIN);
+    parsingDWIN();
+    writeHalfWordDWIN( addressesAndVariablesDWIN.ledPowerAddressDWIN,                   addressesAndVariablesDWIN.ledPowerVariableDWIN);
+    parsingDWIN();
+    writeHalfWordDWIN( addressesAndVariablesDWIN.attemptsPasswordAddressDWIN,           addressesAndVariablesDWIN.attemptsPasswordVariableDWIN);
+    parsingDWIN();
+    warningIconPassword(addressesAndVariablesDWIN.attemptsPasswordVariableDWIN);
+    writeHalfWordDWIN( addressesAndVariablesDWIN.passwordServiceAddressDWIN,            addressesAndVariablesDWIN.passwordServiceVariableDWIN);
+    parsingDWIN();
+    writeHalfWordDWIN( addressesAndVariablesDWIN.monthPayAddressDWIN,addressesAndVariablesDWIN.monthPayVariableDWIN);
+   
+    parsingDWIN();
+    writeHalfWordDWIN( addressesAndVariablesDWIN.dateYearAddressDWIN,                   addressesAndVariablesDWIN.dateYearVariableDWIN);
+    parsingDWIN();
+    writeHalfWordDWIN( addressesAndVariablesDWIN.dateMonthAddressDWIN,                  addressesAndVariablesDWIN.dateMonthVariableDWIN);
+    parsingDWIN();
+    writeHalfWordDWIN( addressesAndVariablesDWIN.dateDateAddressDWIN,                   addressesAndVariablesDWIN.dateDateVariableDWIN);
+    parsingDWIN();
+    writeHalfWordDWIN( addressesAndVariablesDWIN.timeHoursAddressDWIN,                  addressesAndVariablesDWIN.timeHoursVariableDWIN);
+    parsingDWIN();
+    writeHalfWordDWIN( addressesAndVariablesDWIN.timeMinutesAddressDWIN,                addressesAndVariablesDWIN.timeMinutesVariableDWIN);
+   
+    parsingDWIN();
+    writeHalfWordDWIN( addressesAndVariablesDWIN.dateYearAddressSetDWIN,                addressesAndVariablesDWIN.dateYearVariableSetDWIN);
+    parsingDWIN();
+    writeHalfWordDWIN( addressesAndVariablesDWIN.dateMonthAddressSetDWIN,               addressesAndVariablesDWIN.dateMonthVariableSetDWIN);
+    parsingDWIN();
+    writeHalfWordDWIN( addressesAndVariablesDWIN.dateDateAddressSetDWIN,                addressesAndVariablesDWIN.dateDateVariableSetDWIN);
+    parsingDWIN();
+    writeHalfWordDWIN( addressesAndVariablesDWIN.timeHoursAddressSetDWIN,               addressesAndVariablesDWIN.timeHoursVariableSetDWIN);
+    parsingDWIN();
+    writeHalfWordDWIN( addressesAndVariablesDWIN.timeMinutesAddressSetDWIN,             addressesAndVariablesDWIN.timeMinutesVariableSetDWIN);
+    
+    parsingDWIN();
+    writeWordDWIN( addressesAndVariablesDWIN.totalWorkTimeAddressDWIN,                  addressesAndVariablesDWIN.totalWorkTimeVariableDWIN);
+    parsingDWIN();
+    writeWordDWIN( addressesAndVariablesDWIN.serialNumberAddressDWIN,                   addressesAndVariablesDWIN.serialNumberVariableDWIN);
+    parsingDWIN();
+    }
+//==============================================================================
+//--------------------------------test Dwin-------------------------------------
+//==============================================================================
+void testDWIN()
+{
+  SendPresetDWIN();
+for (uint8_t i = 0; i < 14;i++)
+{
+  HAL_Delay(3000);
+  goToPageDWIN(i);
+  writeHalfWordDWIN( addressesAndVariablesDWIN.attemptsPasswordAddressDWIN,           addressesAndVariablesDWIN.attemptsPasswordVariableDWIN);
+  parsingDWIN();
+  parsingDWIN();
+  parsingDWIN();
+  
+}
+
+HAL_Delay(100000);
+}
+//==============================================================================
+//------------------------------command Page 0----------------------------------
+//==============================================================================
+void commandPage0()
+{
+     if (readDataDWIN.parsingDataDWIN.adress == commandSynchrodataDWIN.Page0.StartWork)
+    {
+      SendPresetDWIN();
+      if (saveToFlashData.blockedForNonPayment == 0) // �������� ������ 
+      {
+        goToPageDWIN(1); // ���� ��� ������������� �������� ������
+      }
+      else 
+      {
+        goToPageDWIN(13); // ���� ����� �������� ��������� � ����� ����� ������ 
+      }
+    } 
+}
+//==============================================================================
+//------------------------------command Page 1----------------------------------
+//==============================================================================
+void commandPage1()
+{
+      if (readDataDWIN.parsingDataDWIN.adress ==  commandSynchrodataDWIN.Page1.GoToProcedure)
+    {
+      goToPageDWIN(5);
+      workStateVacuM.minutes = saveToFlashData.timeOfWorkMinutes;
+      workStateVacuM.seconds = 0;
+      workStateVacuM.power = saveToFlashData.powerOfWork;
+      workStateVacuM.state = stop;
+      writeHalfWordDWIN( addressesAndVariablesDWIN.timeOfWorkMinutesActualAddressDWIN,workStateVacuM.minutes);
+      writeHalfWordDWIN( addressesAndVariablesDWIN.timeOfWorkSecondsActualAddressDWIN,workStateVacuM.seconds);
+      writeHalfWordDWIN( addressesAndVariablesDWIN.powerOfWorkAddressDWIN,workStateVacuM.power); 
+    }
+    if (readDataDWIN.parsingDataDWIN.adress ==  commandSynchrodataDWIN.Page1.GoToSettingsMenu)
+    {
+      goToPageDWIN(2);
+    }
+    
+      if ((readDataDWIN.parsingDataDWIN.command == 0x83)&&(readDataDWIN.parsingDataDWIN.adress == commandSynchrodataDWIN.Page1.passAddress))
+      {
+        readDataDWIN.parsingDataDWIN.command = none;
+        password = 0;
+        password = ((readDataDWIN.parsingDataDWIN.data[1]<<24)|(readDataDWIN.parsingDataDWIN.data[2]<<16)|(readDataDWIN.parsingDataDWIN.data[3]<<8)|(readDataDWIN.parsingDataDWIN.data[4]));
+        if (password == passwordService)
+        {         
+          goToPageDWIN(6);
+        }
+      }
+}
+//==============================================================================
+//------------------------------command Page 2----------------------------------
+//==============================================================================
+void commandPage2()
+{
+      if (readDataDWIN.parsingDataDWIN.adress ==  commandSynchrodataDWIN.Page2.GoToCalendar)
+    {
+      HAL_RTC_GetTime(&hrtc, &timeDWIN, RTC_FORMAT_BIN); // RTC_FORMAT_BIN , RTC_FORMAT_BCD
+      HAL_RTC_GetDate(&hrtc, &dateDWIN, RTC_FORMAT_BIN);
+      dateAndTimeSaveVariable.year      = dateDWIN.Year;
+      dateAndTimeSaveVariable.month     = dateDWIN.Month;
+      dateAndTimeSaveVariable.date      = dateDWIN.Date;
+      dateAndTimeSaveVariable.hours     = timeDWIN.Hours;
+      dateAndTimeSaveVariable.minutes   = timeDWIN.Minutes;
+      parsingDWIN();
+      writeHalfWordDWIN( addressesAndVariablesDWIN.dateYearAddressSetDWIN,dateAndTimeSaveVariable.year);
+      parsingDWIN();
+      writeHalfWordDWIN( addressesAndVariablesDWIN.dateMonthAddressSetDWIN,dateAndTimeSaveVariable.month);
+      parsingDWIN();
+      writeHalfWordDWIN( addressesAndVariablesDWIN.dateDateAddressSetDWIN,dateAndTimeSaveVariable.date);
+      parsingDWIN();
+      writeHalfWordDWIN( addressesAndVariablesDWIN.timeHoursAddressSetDWIN,dateAndTimeSaveVariable.hours);
+      parsingDWIN();
+      writeHalfWordDWIN( addressesAndVariablesDWIN.timeMinutesAddressSetDWIN,dateAndTimeSaveVariable.minutes);
+      parsingDWIN();
+      goToPageDWIN(4);
+        
+    }
+    if (readDataDWIN.parsingDataDWIN.adress ==  commandSynchrodataDWIN.Page2.GoToCounter)
+    {
+      goToPageDWIN(3);
+    }
+    if (readDataDWIN.parsingDataDWIN.adress ==  commandSynchrodataDWIN.Page2.GoToSettings)
+    {
+      goToPageDWIN(7);
+    }
+}
+//==============================================================================
+//------------------------------command Page 3----------------------------------
+//==============================================================================
+void commandPage3()
+{
+  
+    if (readDataDWIN.parsingDataDWIN.adress ==  commandSynchrodataDWIN.Page3.ResetCounter)
+    {
+      saveToFlashData.timeWorksBrushes = 500;// ��������� �� 500 �������� ����� � �������� � ���� ������ 
+      saveDataToFlash(&saveToFlashData);
+      readSaveData(&saveToFlashData);
+      writeHalfWordDWIN( addressesAndVariablesDWIN.workingTimeBrushesAddressDWIN,saveToFlashData.timeWorksBrushes);
+    }
+}
+//==============================================================================
+//------------------------------command Page 0----------------------------------
+//==============================================================================
+void commandPage4()
+{
+      if ((readDataDWIN.parsingDataDWIN.adress == commandSynchrodataDWIN.Page4.DateM)||(readDataDWIN.parsingDataDWIN.adress == commandSynchrodataDWIN.Page4.DateMLong))
+    {
+       if (dateAndTimeSaveVariable.date <= 1) dateAndTimeSaveVariable.date = 1;
+       else dateAndTimeSaveVariable.date--;
+       flagSaveTimeAndDate = 1;
+      writeHalfWordDWIN( addressesAndVariablesDWIN.dateDateAddressSetDWIN,dateAndTimeSaveVariable.date);
+      parsingDWIN();
+      readDataDWIN.parsingDataDWIN.adress = 0;
+    }
+      if ((readDataDWIN.parsingDataDWIN.adress == commandSynchrodataDWIN.Page4.DateP)||(readDataDWIN.parsingDataDWIN.adress == commandSynchrodataDWIN.Page4.DatePLong))
+    {
+       if (dateAndTimeSaveVariable.date >= 31) dateAndTimeSaveVariable.date = 31;
+       else dateAndTimeSaveVariable.date++;
+       flagSaveTimeAndDate = 1;
+      writeHalfWordDWIN( addressesAndVariablesDWIN.dateDateAddressSetDWIN,dateAndTimeSaveVariable.date);
+      parsingDWIN();
+      readDataDWIN.parsingDataDWIN.adress = 0;
+   
+    }
+      if (readDataDWIN.parsingDataDWIN.adress == commandSynchrodataDWIN.Page4.GoToPage2)
+    {
+      goToPageDWIN(2);
+      if(flagSaveTimeAndDate == 1)
+      {
+      saveTimeAndDataToRTC(dateAndTimeSaveVariable.year,dateAndTimeSaveVariable.month, dateAndTimeSaveVariable.date, dateAndTimeSaveVariable.hours, dateAndTimeSaveVariable.minutes);
+      flagSaveTimeAndDate = 0;
+      minutesOld = 61;
+      }
+    }
+      if ((readDataDWIN.parsingDataDWIN.adress == commandSynchrodataDWIN.Page4.HoursM)||(readDataDWIN.parsingDataDWIN.adress == commandSynchrodataDWIN.Page4.HoursMLong))
+    {
+       if (dateAndTimeSaveVariable.hours <= 0) dateAndTimeSaveVariable.hours = 0;
+       else dateAndTimeSaveVariable.hours--;
+       flagSaveTimeAndDate = 1;
+      writeHalfWordDWIN( addressesAndVariablesDWIN.timeHoursAddressSetDWIN,dateAndTimeSaveVariable.hours);
+      parsingDWIN();
+      readDataDWIN.parsingDataDWIN.adress = 0;
+  
+    }
+      if ((readDataDWIN.parsingDataDWIN.adress == commandSynchrodataDWIN.Page4.HoursP)||(readDataDWIN.parsingDataDWIN.adress == commandSynchrodataDWIN.Page4.HoursPLong))
+    {
+       if (dateAndTimeSaveVariable.hours >= 23) dateAndTimeSaveVariable.hours = 23;
+       else dateAndTimeSaveVariable.hours++;
+       flagSaveTimeAndDate = 1;
+      writeHalfWordDWIN( addressesAndVariablesDWIN.timeHoursAddressSetDWIN,dateAndTimeSaveVariable.hours);
+      parsingDWIN();
+      readDataDWIN.parsingDataDWIN.adress = 0;
+ 
+    }
+      if ((readDataDWIN.parsingDataDWIN.adress == commandSynchrodataDWIN.Page4.MinutesM)||(readDataDWIN.parsingDataDWIN.adress == commandSynchrodataDWIN.Page4.MinutesMLong))
+    {
+       if (dateAndTimeSaveVariable.minutes <= 0) dateAndTimeSaveVariable.minutes = 0;
+       else dateAndTimeSaveVariable.minutes--;
+       flagSaveTimeAndDate = 1;
+      writeHalfWordDWIN( addressesAndVariablesDWIN.timeMinutesAddressSetDWIN,dateAndTimeSaveVariable.minutes);
+      parsingDWIN();
+      readDataDWIN.parsingDataDWIN.adress = 0;
+ 
+    }
+      if ((readDataDWIN.parsingDataDWIN.adress == commandSynchrodataDWIN.Page4.MinutesP)||(readDataDWIN.parsingDataDWIN.adress == commandSynchrodataDWIN.Page4.MinutesPLong))
+    {
+       if (dateAndTimeSaveVariable.minutes >= 59) dateAndTimeSaveVariable.minutes = 59;
+       else dateAndTimeSaveVariable.minutes++;
+       flagSaveTimeAndDate = 1;
+      writeHalfWordDWIN( addressesAndVariablesDWIN.timeMinutesAddressSetDWIN,dateAndTimeSaveVariable.minutes);
+      parsingDWIN();
+      readDataDWIN.parsingDataDWIN.adress = 0;
+   
+    }
+      if ((readDataDWIN.parsingDataDWIN.adress == commandSynchrodataDWIN.Page4.MonthM)||(readDataDWIN.parsingDataDWIN.adress == commandSynchrodataDWIN.Page4.MonthMLong))
+    {
+       if (dateAndTimeSaveVariable.month <= 1) dateAndTimeSaveVariable.month = 1;
+       else dateAndTimeSaveVariable.month--;
+       flagSaveTimeAndDate = 1;
+      writeHalfWordDWIN( addressesAndVariablesDWIN.dateMonthAddressSetDWIN,dateAndTimeSaveVariable.month);
+      parsingDWIN();
+      readDataDWIN.parsingDataDWIN.adress = 0;
+
+    }
+      if ((readDataDWIN.parsingDataDWIN.adress == commandSynchrodataDWIN.Page4.MonthP)||(readDataDWIN.parsingDataDWIN.adress == commandSynchrodataDWIN.Page4.MonthPLong))
+    {
+       if (dateAndTimeSaveVariable.month >= 12) dateAndTimeSaveVariable.month = 12;
+       else dateAndTimeSaveVariable.month++;
+       flagSaveTimeAndDate = 1;
+      writeHalfWordDWIN( addressesAndVariablesDWIN.dateMonthAddressSetDWIN,dateAndTimeSaveVariable.month);
+      parsingDWIN();
+      readDataDWIN.parsingDataDWIN.adress = 0;
+  
+    }
+      if ((readDataDWIN.parsingDataDWIN.adress == commandSynchrodataDWIN.Page4.YearM)||(readDataDWIN.parsingDataDWIN.adress == commandSynchrodataDWIN.Page4.YearMLong))
+    {
+       if (dateAndTimeSaveVariable.year <= 21) dateAndTimeSaveVariable.year = 21;
+       else dateAndTimeSaveVariable.year--;
+       flagSaveTimeAndDate = 1;
+      writeHalfWordDWIN( addressesAndVariablesDWIN.dateYearAddressSetDWIN,dateAndTimeSaveVariable.year);
+      parsingDWIN();
+      readDataDWIN.parsingDataDWIN.adress = 0;
+
+    }
+      if ((readDataDWIN.parsingDataDWIN.adress == commandSynchrodataDWIN.Page4.YearP)||(readDataDWIN.parsingDataDWIN.adress == commandSynchrodataDWIN.Page4.YearPLong))
+    {
+       if (dateAndTimeSaveVariable.year >= 99) dateAndTimeSaveVariable.year = 99;
+       else dateAndTimeSaveVariable.year++;
+       flagSaveTimeAndDate = 1;
+      writeHalfWordDWIN( addressesAndVariablesDWIN.dateYearAddressSetDWIN,dateAndTimeSaveVariable.year);
+      parsingDWIN();
+      readDataDWIN.parsingDataDWIN.adress = 0;
+ 
+    }
+
+}
+//==============================================================================
+//------------------------------command Page 5----------------------------------
+//==============================================================================
+void commandPage5()
+{
+  if (workStateVacuM.state == stop)
+  {
+      if (readDataDWIN.parsingDataDWIN.adress ==  commandSynchrodataDWIN.Page5.GoToPage1)
+        {
+          goToPageDWIN(1);
+          readDataDWIN.parsingDataDWIN.adress = 0;
+          saveToFlashData.powerOfWork = workStateVacuM.power;
+          saveDataToFlash(&saveToFlashData);
+          readSaveData(&saveToFlashData);
+        }
+  }
+      if (readDataDWIN.parsingDataDWIN.adress ==  commandSynchrodataDWIN.Page5.Pause)
+        {
+          workStateVacuM.state = pause;
+          readDataDWIN.parsingDataDWIN.adress = 0;
+          TIM2->CCR1 = 0;
+        }
+      if (readDataDWIN.parsingDataDWIN.adress ==  commandSynchrodataDWIN.Page5.Play)
+        {
+          workStateVacuM.state = play;
+          readDataDWIN.parsingDataDWIN.adress = 0;
+          TIM2->CCR1 = (workStateVacuM.power * 655);
+        }
+      if ((readDataDWIN.parsingDataDWIN.adress ==  commandSynchrodataDWIN.Page5.PowerM)||(readDataDWIN.parsingDataDWIN.adress ==  commandSynchrodataDWIN.Page5.PowerMLong))
+        {
+          if (workStateVacuM.power <= 5) workStateVacuM.power = 0;
+          else workStateVacuM.power -= 5;
+          writeHalfWordDWIN( addressesAndVariablesDWIN.powerOfWorkAddressDWIN,workStateVacuM.power); 
+          readDataDWIN.parsingDataDWIN.adress = 0;    
+          if (workStateVacuM.state == play){TIM2->CCR1 = (workStateVacuM.power * 655);}
+        }
+      if ((readDataDWIN.parsingDataDWIN.adress ==  commandSynchrodataDWIN.Page5.PowerP)||(readDataDWIN.parsingDataDWIN.adress ==  commandSynchrodataDWIN.Page5.PowerPLong))
+        {
+          if (workStateVacuM.power >= 95) workStateVacuM.power = 100;
+          else workStateVacuM.power += 5;
+          writeHalfWordDWIN( addressesAndVariablesDWIN.powerOfWorkAddressDWIN,workStateVacuM.power); 
+          readDataDWIN.parsingDataDWIN.adress = 0;
+          if (workStateVacuM.state == play){TIM2->CCR1 = (workStateVacuM.power * 655);}
+        }
+      if (readDataDWIN.parsingDataDWIN.adress ==  commandSynchrodataDWIN.Page5.Stop)
+        {
+          workStateVacuM.state = stop;
+          workStateVacuM.seconds = 0;
+          workStateVacuM.minutes = saveToFlashData.timeOfWorkMinutes;
+          readDataDWIN.parsingDataDWIN.adress = 0;
+          TIM2->CCR1 = 0;
+          writeHalfWordDWIN( addressesAndVariablesDWIN.timeOfWorkMinutesActualAddressDWIN,workStateVacuM.minutes);
+          writeHalfWordDWIN( addressesAndVariablesDWIN.timeOfWorkSecondsActualAddressDWIN,workStateVacuM.seconds);
+          if (addressesAndVariablesDWIN.workingTimeBrushesVariableDWIN <= MIN_TIME_BRUSH)
+          {
+            goToPageDWIN(11);
+          }
+        }
+      if ((readDataDWIN.parsingDataDWIN.adress ==  commandSynchrodataDWIN.Page5.TimeWorkM)||(readDataDWIN.parsingDataDWIN.adress ==  commandSynchrodataDWIN.Page5.TimeWorkMLong))
+        {
+          if (workStateVacuM.minutes >= 1){workStateVacuM.minutes--;}
+          else workStateVacuM.seconds = 0;      
+          writeHalfWordDWIN( addressesAndVariablesDWIN.timeOfWorkMinutesActualAddressDWIN,workStateVacuM.minutes);
+          writeHalfWordDWIN( addressesAndVariablesDWIN.timeOfWorkSecondsActualAddressDWIN,workStateVacuM.seconds);
+      readDataDWIN.parsingDataDWIN.adress = 0;
+        }
+      if ((readDataDWIN.parsingDataDWIN.adress ==  commandSynchrodataDWIN.Page5.TimeWorkP)||(readDataDWIN.parsingDataDWIN.adress ==  commandSynchrodataDWIN.Page5.TimeWorkPLong))
+        {
+          if (workStateVacuM.minutes < 99)workStateVacuM.minutes++;
+          else workStateVacuM.minutes = 99;
+          writeHalfWordDWIN( addressesAndVariablesDWIN.timeOfWorkMinutesActualAddressDWIN,workStateVacuM.minutes);
+          writeHalfWordDWIN( addressesAndVariablesDWIN.timeOfWorkSecondsActualAddressDWIN,workStateVacuM.seconds);
+      readDataDWIN.parsingDataDWIN.adress = 0;
+        }  
+  
+
+}
+//==============================================================================
+//------------------------------command Page 6----------------------------------
+//==============================================================================
+void commandPage6()
+{
+    if (readDataDWIN.parsingDataDWIN.adress == commandSynchrodataDWIN.Page6.GoToPage1){goToPageDWIN(1);}      
+    if (readDataDWIN.parsingDataDWIN.adress == commandSynchrodataDWIN.Page6.resetData)
+    {
+          saveToFlashData.blockedForNonPayment = 1;
+          saveToFlashData.ledBrightnessSleep = 50;
+          saveToFlashData.ledBrightnessWork = 100;
+          saveToFlashData.passwordAttempts = AttemptsPass;
+          saveToFlashData.powerOfWork = 0;
+          saveToFlashData.timeAllWork = 0;
+          saveToFlashData.timeOfWorkMinutes = 10;
+          saveToFlashData.timeWorksBrushes = 500;
+          saveDataToFlash(&saveToFlashData);
+          SendPresetDWIN();
+          saveTimeAndDataToRTC(21,1, 1, 0, 0);
+          minutesOld = 61;
+    } 
+    if (readDataDWIN.parsingDataDWIN.adress == commandSynchrodataDWIN.Page6.monthToPay)
+    {
+      saveToFlashData.monthPay = readDataDWIN.parsingDataDWIN.data[2];
+      readDataDWIN.parsingDataDWIN.adress = 0;
+      saveDataToFlash(&saveToFlashData);
+    }     
+    if (readDataDWIN.parsingDataDWIN.adress == commandSynchrodataDWIN.Page6.serialNumberRead)
+    {
+      saveToFlashData.serialNumber = ((readDataDWIN.parsingDataDWIN.data[1]<<24)|(readDataDWIN.parsingDataDWIN.data[2]<<16)|(readDataDWIN.parsingDataDWIN.data[3]<<8)|(readDataDWIN.parsingDataDWIN.data[4]));
+      readDataDWIN.parsingDataDWIN.adress = 0;
+      saveDataToFlash(&saveToFlashData);
+    }     
+}
+//==============================================================================
+//------------------------------command Page 7----------------------------------
+//==============================================================================
+void commandPage7()
+{
+      if (readDataDWIN.parsingDataDWIN.adress ==  commandSynchrodataDWIN.Page7.GoToLedPage)
+        {
+          
+          saveDataToFlash(&saveToFlashData);
+          readSaveData(&saveToFlashData);
+          goToPageDWIN(15); // ��� ������ �������� � ���� ������ 
+          readDataDWIN.parsingDataDWIN.adress = 0;
+        }  
+  
+      if (readDataDWIN.parsingDataDWIN.adress ==  commandSynchrodataDWIN.Page7.GoToPage2)
+        {
+          
+          saveDataToFlash(&saveToFlashData);
+          readSaveData(&saveToFlashData);
+          goToPageDWIN(2); // ��� ������ �������� � ���� ������ 
+          readDataDWIN.parsingDataDWIN.adress = 0;
+        }
+      if ((readDataDWIN.parsingDataDWIN.adress ==  commandSynchrodataDWIN.Page7.LedM)||(readDataDWIN.parsingDataDWIN.adress ==  commandSynchrodataDWIN.Page7.LedMLong))
+        {
+          if (saveToFlashData.ledBrightnessWork <= 6) saveToFlashData.ledBrightnessWork = 3;
+          else saveToFlashData.ledBrightnessWork -= 3;   
+          writeHalfWordDWIN( addressesAndVariablesDWIN.ledPowerAddressDWIN,((saveToFlashData.ledBrightnessWork<<8)|saveToFlashData.ledBrightnessSleep));
+          readDataDWIN.parsingDataDWIN.adress = 0;
+        
+        }
+      if ((readDataDWIN.parsingDataDWIN.adress ==  commandSynchrodataDWIN.Page7.LedP)||(readDataDWIN.parsingDataDWIN.adress ==  commandSynchrodataDWIN.Page7.LedPLong))
+        {
+          if (saveToFlashData.ledBrightnessWork >=97) saveToFlashData.ledBrightnessWork = 100;
+          else saveToFlashData.ledBrightnessWork += 3;
+          writeHalfWordDWIN( addressesAndVariablesDWIN.ledPowerAddressDWIN,((saveToFlashData.ledBrightnessWork<<8)|saveToFlashData.ledBrightnessSleep));
+          readDataDWIN.parsingDataDWIN.adress = 0;
+        }
+      if ((readDataDWIN.parsingDataDWIN.adress ==  commandSynchrodataDWIN.Page7.TimeWorkM)||(readDataDWIN.parsingDataDWIN.adress ==  commandSynchrodataDWIN.Page7.TimeWorkMLong))
+        {
+          if (saveToFlashData.timeOfWorkMinutes <= 1) saveToFlashData.timeOfWorkMinutes = 1;
+          else saveToFlashData.timeOfWorkMinutes--; 
+          writeHalfWordDWIN( addressesAndVariablesDWIN.timeOfWorkMinutesDefaultAddressDWIN,saveToFlashData.timeOfWorkMinutes);
+          readDataDWIN.parsingDataDWIN.adress = 0;
+        }
+      if ((readDataDWIN.parsingDataDWIN.adress ==  commandSynchrodataDWIN.Page7.TimeWorkP)|| (readDataDWIN.parsingDataDWIN.adress ==  commandSynchrodataDWIN.Page7.TimeWorkPLong))
+        {
+          if (saveToFlashData.timeOfWorkMinutes >= 99)saveToFlashData.timeOfWorkMinutes = 99;
+          else saveToFlashData.timeOfWorkMinutes++;
+          writeHalfWordDWIN( addressesAndVariablesDWIN.timeOfWorkMinutesDefaultAddressDWIN,saveToFlashData.timeOfWorkMinutes);  
+          readDataDWIN.parsingDataDWIN.adress = 0;
+        }
+}
+//==============================================================================
+//------------------------------command Page 13----------------------------------
+//==============================================================================
+void commandPage13()
+{
+  
+      if (readDataDWIN.parsingDataDWIN.adress ==  commandSynchrodataDWIN.Page13.ChekPassword)
+    {   
+      if (passwordTimer == 0)
+      {
+          readDataDWIN.parsingDataDWIN.adress = 0;
+          if (saveToFlashData.passwordAttempts != 0)
+          {
+            password = 0;
+            readVariableDWIN(commandSynchrodataDWIN.Page13.passAddress,2);
+            HAL_Delay(10);
+            parsingDWIN();
+            if ((readDataDWIN.parsingDataDWIN.command == 0x83)&&(readDataDWIN.parsingDataDWIN.adress == commandSynchrodataDWIN.Page13.passAddress))
+            {
+              readDataDWIN.parsingDataDWIN.command = none;
+              password = 0;
+              password = ((uint16_t)(readDataDWIN.parsingDataDWIN.data[1]<<24)|(readDataDWIN.parsingDataDWIN.data[2]<<16)|(readDataDWIN.parsingDataDWIN.data[3]<<8)|(readDataDWIN.parsingDataDWIN.data[4]));
+              if (password == passwordPay)
+              {
+                saveToFlashData.passwordAttempts = AttemptsPass;
+                saveToFlashData.blockedForNonPayment = 0;
+                saveDataToFlash(&saveToFlashData);
+                goToPageDWIN(0);
+              }
+              else
+              {
+                if (password!=0)
+                {
+                  saveToFlashData.passwordAttempts--;
+                  passwordTimer = 11;
+                  warningIconPassword(saveToFlashData.passwordAttempts);
+                  saveDataToFlash(&saveToFlashData);
+                }
+                writeWordDWIN( commandSynchrodataDWIN.Page13.passAddress, 0);
+                writeHalfWordDWIN( addressesAndVariablesDWIN.attemptsPasswordAddressDWIN, saveToFlashData.passwordAttempts);
+                parsingDWIN();
+                parsingDWIN();
+                readDataDWIN.parsingDataDWIN.adress = 0;
+                readDataDWIN.parsingDataDWIN.adress = 0;
+              }
+            }
+          }
+            
+          // ��������� ������ �� ���������� ��� ��������� ���������� �������
+          // ��� ���������� ��������� ���� ������ ��������� � ���� ������ � ������� �� ����� 1 
+          // ��� ������������ ��������� ���������� �������
+      }
+      else 
+      {
+        readDataDWIN.parsingDataDWIN.adress = 0;
+      }
+    }
+}
+//==============================================================================
+//------------------------------command Page 15----------------------------------
+//==============================================================================
+void commandPage15()
+{
+        if (readDataDWIN.parsingDataDWIN.adress ==  commandSynchrodataDWIN.Page15.GoToPage7)
+        {
+          goToPageDWIN(7); // ��� ������ �������� � ���� ������ 
+          readDataDWIN.parsingDataDWIN.adress = 0;
+        }  
+}
+//==============================================================================
+//---------------------command Synchrodata Handler------------------------------
+//==============================================================================
+void commandSynchrodataHandler()
+{
+  if (readDataDWIN.parsingDataDWIN.command == 0x83)
+  {
+    commandPage0();
+    commandPage1();
+    commandPage2();
+    commandPage3();
+    commandPage4();
+    commandPage5();
+    commandPage6();
+    commandPage7();
+    commandPage13();
+    commandPage15();
+  }
+}
+//==============================================================================
+//-------------------------------Work Process-----------------------------------
+//==============================================================================
+
+void workProcessVacuM()
+{
+    HAL_RTC_GetTime(&hrtc, &timeDWIN, RTC_FORMAT_BIN); // RTC_FORMAT_BIN , RTC_FORMAT_BCD
+    HAL_RTC_GetDate(&hrtc, &dateDWIN, RTC_FORMAT_BIN);
+    if (timeDWIN.Minutes != minutesOld)
+    {
+    minutesOld = timeDWIN.Minutes;
+    parsingDWIN();
+    writeHalfWordDWIN( addressesAndVariablesDWIN.dateYearAddressDWIN,dateDWIN.Year);
+    parsingDWIN();
+    writeHalfWordDWIN( addressesAndVariablesDWIN.dateMonthAddressDWIN,dateDWIN.Month);
+    parsingDWIN();
+    writeHalfWordDWIN( addressesAndVariablesDWIN.dateDateAddressDWIN,dateDWIN.Date);
+    parsingDWIN();
+    writeHalfWordDWIN( addressesAndVariablesDWIN.timeHoursAddressDWIN,timeDWIN.Hours);
+    parsingDWIN();
+    writeHalfWordDWIN( addressesAndVariablesDWIN.timeMinutesAddressDWIN,timeDWIN.Minutes);
+    }
+    if (workStateVacuM.state == play)
+    {
+      if (timeDWIN.Seconds != secondOld)
+        { secondOld = timeDWIN.Seconds;
+          if (workStateVacuM.seconds == 0)
+          {
+            if (workStateVacuM.minutes != 0)
+            {
+              workStateVacuM.minutes--;
+              workStateVacuM.seconds = 59;
+            }
+            else 
+            {
+              workStateVacuM.seconds = 0;
+              workStateVacuM.state = stop;
+              TIM2->CCR1 = 0;
+              workStateVacuM.minutes = saveToFlashData.timeOfWorkMinutes;
+              writeHalfWordDWIN( addressesAndVariablesDWIN.timeOfWorkMinutesActualAddressDWIN,workStateVacuM.minutes);
+              writeHalfWordDWIN( addressesAndVariablesDWIN.timeOfWorkSecondsActualAddressDWIN,workStateVacuM.seconds);          
+              if (addressesAndVariablesDWIN.workingTimeBrushesVariableDWIN <= MIN_TIME_BRUSH)
+                {
+                  goToPageDWIN(11);
+                }
+            }
+          }
+          else 
+          {
+            workStateVacuM.seconds--;
+          }
+          writeHalfWordDWIN( addressesAndVariablesDWIN.timeOfWorkMinutesActualAddressDWIN,workStateVacuM.minutes);
+          writeHalfWordDWIN( addressesAndVariablesDWIN.timeOfWorkSecondsActualAddressDWIN,workStateVacuM.seconds);
+        }
+    }
+    if ((timeDWIN.Seconds != secondOldPassTimer)&&(passwordTimer != 0))
+    {
+      secondOldPassTimer = timeDWIN.Seconds;
+      passwordTimer--;
+      writeHalfWordDWIN( addressesAndVariablesDWIN.attemptsPasswordTimeAddressDWIN, passwordTimer);
+    }
+}
+//==============================================================================
+//-------------------------------pocess Dwin------------------------------------
+//==============================================================================
+
+
+uint8_t i = 1;
+void processDWIN()
+{
+  if (fisrtStartDWIN == 0)
+  {
+    fisrtStartDWIN = 1;
+    readSaveData(&saveToFlashData);
+    SendPresetDWIN();
+  }
+  parsingDWIN();
+  commandSynchrodataHandler();
+  workProcessVacuM();   
+}
+
+//==============================================================================
+//---------------------------------END FILE-------------------------------------
+//==============================================================================

@@ -1,0 +1,2 @@
+DWIN_APP.c:27:6:dwinAppInit	8	static
+DWIN_APP.c:34:6:ledPWM	8	static

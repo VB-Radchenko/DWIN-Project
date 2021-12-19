@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">&#x0A;<refactoring comment="Delete resource &apos;DWIN Project/DWIN_LIB/DWIN_APP.h&apos;" deleteContents="false" description="Delete resource &apos;DWIN Project/DWIN_LIB/DWIN_APP.h&apos;" element1="/DWIN Project/DWIN_LIB/DWIN_APP.h" flags="7" id="org.eclipse.ltk.core.refactoring.delete.resources" resources="1" stamp="1639586152520"/>&#x0A;<refactoring comment="Delete resource &apos;DWIN Project/DWIN_LIB/DWIN_APP.c&apos;" deleteContents="false" description="Delete resource &apos;DWIN Project/DWIN_LIB/DWIN_APP.c&apos;" element1="/DWIN Project/DWIN_LIB/DWIN_APP.c" flags="7" id="org.eclipse.ltk.core.refactoring.delete.resources" resources="1" stamp="1639586156717"/>
+</session>

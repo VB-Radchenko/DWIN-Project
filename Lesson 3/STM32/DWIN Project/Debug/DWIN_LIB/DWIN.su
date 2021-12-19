@@ -1,0 +1,11 @@
+DWIN.c:27:6:dwinUartDmaInit	16	static
+DWIN.c:44:9:getByte	16	static
+DWIN.c:62:6:receivingDataPacket	16	static
+DWIN.c:110:6:parsingDWIN	16	static
+DWIN.c:129:6:goToPageDWIN	32	static
+DWIN.c:139:6:readVariableDWIN	32	static
+DWIN.c:149:6:writeLedDWIN	32	static
+DWIN.c:167:6:writeVariableDWIN	272	static
+DWIN.c:188:6:writeHalfWordDWIN	32	static
+DWIN.c:206:6:writeWordDWIN	32	static
+DWIN.c:226:6:writeDoubleWordDWIN	40	static
