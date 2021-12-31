@@ -1,0 +1,4 @@
+DWIN_APP.c:34:6:dwinAppInit	8	static
+DWIN_APP.c:43:6:ledPWM	8	static
+DWIN_APP.c:70:6:curveProcessDWIN	1048	static
+DWIN_APP.c:115:6:curveProcessX10DWIN	1056	static
