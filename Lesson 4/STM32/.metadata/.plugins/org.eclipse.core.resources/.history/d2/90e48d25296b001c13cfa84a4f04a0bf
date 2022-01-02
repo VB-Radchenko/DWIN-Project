@@ -193,7 +193,7 @@ void curveProcessX10DWIN()
 		  curveDataDWIN.CurveData[7][0] = meandr;
 
 		  writeCurveDWIN(curveDataDWIN);
-		  waitOkMessageDWIN();
+		  parsingDWIN();
 		  memset(&curveDataDWIN, 0, sizeof(curveDataDWIN));
 	  }
 	  else

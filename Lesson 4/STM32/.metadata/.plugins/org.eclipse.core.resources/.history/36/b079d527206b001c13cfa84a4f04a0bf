@@ -128,8 +128,8 @@ int main(void)
 
 	  if (timer2Cnt > 24)
 	  {
-		  curveProcessDWIN();
-		  timer2Cnt = 0;
+
+	  timer2Cnt = 0;
 	  }
 
     /* USER CODE END WHILE */
@@ -141,7 +141,7 @@ int main(void)
 
 
 
-//curveOneProcessDWIN();
+//curveProcessDWIN();
 //curveProcessX10DWIN();
 /**
   * @brief System Clock Configuration

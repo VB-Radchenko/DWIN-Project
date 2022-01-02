@@ -1,5 +1,6 @@
-02:29:12 **** Incremental Build of configuration Debug for project DWIN Project ****
+00:35:01 **** Incremental Build of configuration Debug for project DWIN Project ****
 make -j12 all 
+arm-none-eabi-gcc "../DWIN_LIB/DWIN_APP.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32L476xx -c -I../Core/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32L4xx/Include -I../Drivers/CMSIS/Include -I../DWIN_LIB -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"DWIN_LIB/DWIN_APP.d" -MT"DWIN_LIB/DWIN_APP.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "DWIN_LIB/DWIN_APP.o"
 arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32L476xx -c -I../Core/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32L4xx/Include -I../Drivers/CMSIS/Include -I../DWIN_LIB -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
 arm-none-eabi-gcc -o "DWIN Project.elf" @"objects.list"   -mcpu=cortex-m4 -T"D:\DWIN\DWIN-Project\Lesson 4\STM32\DWIN Project\STM32L476RGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="DWIN Project.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 Finished building target: DWIN Project.elf
@@ -8,7 +9,7 @@ arm-none-eabi-size   DWIN\ Project.elf
 arm-none-eabi-objdump -h -S  DWIN\ Project.elf  > "DWIN Project.list"
 arm-none-eabi-objcopy  -O binary  DWIN\ Project.elf  "DWIN Project.bin"
    text	   data	    bss	    dec	    hex	filename
-  32428	     20	   4484	  36932	   9044	DWIN Project.elf
+  32420	     20	   4484	  36924	   903c	DWIN Project.elf
 Finished building: default.size.stdout
  
 Finished building: DWIN Project.bin
@@ -16,5 +17,5 @@ Finished building: DWIN Project.bin
 Finished building: DWIN Project.list
  
 
-02:29:14 Build Finished. 0 errors, 0 warnings. (took 1s.264ms)
+00:35:04 Build Finished. 0 errors, 0 warnings. (took 3s.364ms)
 

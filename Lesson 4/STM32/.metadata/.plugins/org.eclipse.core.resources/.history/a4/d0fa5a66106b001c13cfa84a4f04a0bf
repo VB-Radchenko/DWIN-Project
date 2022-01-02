@@ -26,7 +26,6 @@
 //==============================================================================
 void ledPWM();
 void dwinAppInit();
-void curveOneProcessDWIN();
 void curveProcessDWIN();
 void curveProcessX10DWIN();
 //==============================================================================

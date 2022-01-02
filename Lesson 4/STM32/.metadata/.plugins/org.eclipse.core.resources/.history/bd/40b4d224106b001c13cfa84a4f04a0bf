@@ -76,13 +76,14 @@ void ledPWM()
 //--------------------------------Curve One-------------------------------------
 //==============================================================================
 
-uint16_t cnt = 0;
+uint8_t cnt = 0;
 void curveOneProcessDWIN()
 {
-	cnt++;
 	  if ( cnt < 180)
 	  {
-		  writeOneCurveDWIN(0, 1, &cnt);
+
+		  writeOneCurveDWIN(0, 1, cnt);
+
 		  waitOkMessageDWIN();
 
 	  }
@@ -193,7 +194,7 @@ void curveProcessX10DWIN()
 		  curveDataDWIN.CurveData[7][0] = meandr;
 
 		  writeCurveDWIN(curveDataDWIN);
-		  waitOkMessageDWIN();
+		  parsingDWIN();
 		  memset(&curveDataDWIN, 0, sizeof(curveDataDWIN));
 	  }
 	  else

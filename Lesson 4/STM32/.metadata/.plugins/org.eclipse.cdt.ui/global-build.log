@@ -8399,3 +8399,232 @@ Finished building: DWIN Project.bin
  
 Finished building: DWIN Project.list
  
+21:33:51 **** Incremental Build of configuration Debug for project DWIN Project ****
+make -j12 all 
+arm-none-eabi-gcc "../DWIN_LIB/DWIN.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32L476xx -c -I../Core/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32L4xx/Include -I../Drivers/CMSIS/Include -I../DWIN_LIB -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"DWIN_LIB/DWIN.d" -MT"DWIN_LIB/DWIN.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "DWIN_LIB/DWIN.o"
+arm-none-eabi-gcc "../DWIN_LIB/DWIN_APP.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32L476xx -c -I../Core/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32L4xx/Include -I../Drivers/CMSIS/Include -I../DWIN_LIB -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"DWIN_LIB/DWIN_APP.d" -MT"DWIN_LIB/DWIN_APP.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "DWIN_LIB/DWIN_APP.o"
+../DWIN_LIB/DWIN_APP.c: In function 'curveOneProcessDWIN':
+../DWIN_LIB/DWIN_APP.c:70:9: error: 'cnt' undeclared (first use in this function); did you mean 'int'?
+   70 |    if ( cnt < 180)
+      |         ^~~
+      |         int
+../DWIN_LIB/DWIN_APP.c:70:9: note: each undeclared identifier is reported only once for each function it appears in
+make: *** [DWIN_LIB/subdir.mk:22: DWIN_LIB/DWIN_APP.o] Error 1
+make: *** Waiting for unfinished jobs....
+"make -j12 all" terminated with exit code 2. Build might be incomplete.
+21:35:47 **** Incremental Build of configuration Debug for project DWIN Project ****
+make -j12 all 
+arm-none-eabi-gcc "../DWIN_LIB/DWIN_APP.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32L476xx -c -I../Core/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32L4xx/Include -I../Drivers/CMSIS/Include -I../DWIN_LIB -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"DWIN_LIB/DWIN_APP.d" -MT"DWIN_LIB/DWIN_APP.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "DWIN_LIB/DWIN_APP.o"
+../DWIN_LIB/DWIN_APP.c: In function 'curveOneProcessDWIN':
+../DWIN_LIB/DWIN_APP.c:85:29: warning: passing argument 3 of 'writeOneCurveDWIN' makes pointer from integer without a cast [-Wint-conversion]
+   85 |     writeOneCurveDWIN(0, 1, cnt);
+      |                             ^~~
+      |                             |
+      |                             uint8_t {aka unsigned char}
+In file included from ../DWIN_LIB/DWIN_APP.c:6:
+../DWIN_LIB/DWIN.h:75:72: note: expected 'uint16_t *' {aka 'short unsigned int *'} but argument is of type 'uint8_t' {aka 'unsigned char'}
+   75 | void writeOneCurveDWIN(uint8_t ChanelCurve, uint8_t lenData, uint16_t* data);
+      |                                                              ~~~~~~~~~~^~~~
+arm-none-eabi-gcc -o "DWIN Project.elf" @"objects.list"   -mcpu=cortex-m4 -T"D:\DWIN\DWIN-Project\Lesson 4\STM32\DWIN Project\STM32L476RGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="DWIN Project.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: DWIN Project.elf
+ 
+arm-none-eabi-size   DWIN\ Project.elf 
+arm-none-eabi-objdump -h -S  DWIN\ Project.elf  > "DWIN Project.list"
+arm-none-eabi-objcopy  -O binary  DWIN\ Project.elf  "DWIN Project.bin"
+   text	   data	    bss	    dec	    hex	filename
+  32428	     20	   4484	  36932	   9044	DWIN Project.elf
+Finished building: default.size.stdout
+ 
+Finished building: DWIN Project.bin
+ 
+Finished building: DWIN Project.list
+ 
+21:36:02 **** Incremental Build of configuration Debug for project DWIN Project ****
+make -j12 all 
+arm-none-eabi-gcc "../DWIN_LIB/DWIN_APP.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32L476xx -c -I../Core/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32L4xx/Include -I../Drivers/CMSIS/Include -I../DWIN_LIB -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"DWIN_LIB/DWIN_APP.d" -MT"DWIN_LIB/DWIN_APP.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "DWIN_LIB/DWIN_APP.o"
+../DWIN_LIB/DWIN_APP.c: In function 'curveOneProcessDWIN':
+../DWIN_LIB/DWIN_APP.c:85:29: warning: passing argument 3 of 'writeOneCurveDWIN' from incompatible pointer type [-Wincompatible-pointer-types]
+   85 |     writeOneCurveDWIN(0, 1, &cnt);
+      |                             ^~~~
+      |                             |
+      |                             uint8_t * {aka unsigned char *}
+In file included from ../DWIN_LIB/DWIN_APP.c:6:
+../DWIN_LIB/DWIN.h:75:72: note: expected 'uint16_t *' {aka 'short unsigned int *'} but argument is of type 'uint8_t *' {aka 'unsigned char *'}
+   75 | void writeOneCurveDWIN(uint8_t ChanelCurve, uint8_t lenData, uint16_t* data);
+      |                                                              ~~~~~~~~~~^~~~
+arm-none-eabi-gcc -o "DWIN Project.elf" @"objects.list"   -mcpu=cortex-m4 -T"D:\DWIN\DWIN-Project\Lesson 4\STM32\DWIN Project\STM32L476RGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="DWIN Project.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: DWIN Project.elf
+ 
+arm-none-eabi-size   DWIN\ Project.elf 
+arm-none-eabi-objdump -h -S  DWIN\ Project.elf  > "DWIN Project.list"
+arm-none-eabi-objcopy  -O binary  DWIN\ Project.elf  "DWIN Project.bin"
+   text	   data	    bss	    dec	    hex	filename
+  32428	     20	   4484	  36932	   9044	DWIN Project.elf
+Finished building: default.size.stdout
+ 
+Finished building: DWIN Project.bin
+ 
+Finished building: DWIN Project.list
+ 
+21:36:20 **** Incremental Build of configuration Debug for project DWIN Project ****
+make -j12 all 
+arm-none-eabi-gcc "../DWIN_LIB/DWIN_APP.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32L476xx -c -I../Core/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32L4xx/Include -I../Drivers/CMSIS/Include -I../DWIN_LIB -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"DWIN_LIB/DWIN_APP.d" -MT"DWIN_LIB/DWIN_APP.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "DWIN_LIB/DWIN_APP.o"
+arm-none-eabi-gcc -o "DWIN Project.elf" @"objects.list"   -mcpu=cortex-m4 -T"D:\DWIN\DWIN-Project\Lesson 4\STM32\DWIN Project\STM32L476RGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="DWIN Project.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: DWIN Project.elf
+ 
+arm-none-eabi-size   DWIN\ Project.elf 
+arm-none-eabi-objdump -h -S  DWIN\ Project.elf  > "DWIN Project.list"
+arm-none-eabi-objcopy  -O binary  DWIN\ Project.elf  "DWIN Project.bin"
+   text	   data	    bss	    dec	    hex	filename
+  32420	     20	   4484	  36924	   903c	DWIN Project.elf
+Finished building: default.size.stdout
+ 
+Finished building: DWIN Project.bin
+ 
+Finished building: DWIN Project.list
+ 
+22:10:39 **** Incremental Build of configuration Debug for project DWIN Project ****
+make -j12 all 
+arm-none-eabi-gcc "../DWIN_LIB/DWIN_APP.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32L476xx -c -I../Core/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32L4xx/Include -I../Drivers/CMSIS/Include -I../DWIN_LIB -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"DWIN_LIB/DWIN_APP.d" -MT"DWIN_LIB/DWIN_APP.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "DWIN_LIB/DWIN_APP.o"
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32L476xx -c -I../Core/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32L4xx/Include -I../Drivers/CMSIS/Include -I../DWIN_LIB -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "DWIN Project.elf" @"objects.list"   -mcpu=cortex-m4 -T"D:\DWIN\DWIN-Project\Lesson 4\STM32\DWIN Project\STM32L476RGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="DWIN Project.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: DWIN Project.elf
+ 
+arm-none-eabi-size   DWIN\ Project.elf 
+arm-none-eabi-objdump -h -S  DWIN\ Project.elf  > "DWIN Project.list"
+arm-none-eabi-objcopy  -O binary  DWIN\ Project.elf  "DWIN Project.bin"
+   text	   data	    bss	    dec	    hex	filename
+  24388	     20	   4484	  28892	   70dc	DWIN Project.elf
+Finished building: default.size.stdout
+ 
+Finished building: DWIN Project.bin
+ 
+Finished building: DWIN Project.list
+ 
+23:30:39 **** Incremental Build of configuration Debug for project DWIN Project ****
+make -j12 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32L476xx -c -I../Core/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32L4xx/Include -I../Drivers/CMSIS/Include -I../DWIN_LIB -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "DWIN Project.elf" @"objects.list"   -mcpu=cortex-m4 -T"D:\DWIN\DWIN-Project\Lesson 4\STM32\DWIN Project\STM32L476RGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="DWIN Project.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: DWIN Project.elf
+ 
+arm-none-eabi-size   DWIN\ Project.elf 
+arm-none-eabi-objdump -h -S  DWIN\ Project.elf  > "DWIN Project.list"
+arm-none-eabi-objcopy  -O binary  DWIN\ Project.elf  "DWIN Project.bin"
+   text	   data	    bss	    dec	    hex	filename
+  24720	     20	   4484	  29224	   7228	DWIN Project.elf
+Finished building: default.size.stdout
+ 
+Finished building: DWIN Project.bin
+ 
+Finished building: DWIN Project.list
+ 
+23:30:43 **** Incremental Build of configuration Debug for project DWIN Project ****
+make -j12 all 
+arm-none-eabi-size   DWIN\ Project.elf 
+   text	   data	    bss	    dec	    hex	filename
+  24720	     20	   4484	  29224	   7228	DWIN Project.elf
+Finished building: default.size.stdout
+ 
+23:32:35 **** Incremental Build of configuration Debug for project DWIN Project ****
+make -j12 all 
+arm-none-eabi-gcc "../DWIN_LIB/DWIN_APP.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32L476xx -c -I../Core/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32L4xx/Include -I../Drivers/CMSIS/Include -I../DWIN_LIB -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"DWIN_LIB/DWIN_APP.d" -MT"DWIN_LIB/DWIN_APP.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "DWIN_LIB/DWIN_APP.o"
+../DWIN_LIB/DWIN_APP.c: In function 'curveOneProcessDWIN':
+../DWIN_LIB/DWIN_APP.c:84:29: warning: passing argument 3 of 'writeOneCurveDWIN' makes pointer from integer without a cast [-Wint-conversion]
+   84 |     writeOneCurveDWIN(0, 1, cnt);
+      |                             ^~~
+      |                             |
+      |                             uint16_t {aka short unsigned int}
+In file included from ../DWIN_LIB/DWIN_APP.c:6:
+../DWIN_LIB/DWIN.h:75:72: note: expected 'uint16_t *' {aka 'short unsigned int *'} but argument is of type 'uint16_t' {aka 'short unsigned int'}
+   75 | void writeOneCurveDWIN(uint8_t ChanelCurve, uint8_t lenData, uint16_t* data);
+      |                                                              ~~~~~~~~~~^~~~
+arm-none-eabi-gcc -o "DWIN Project.elf" @"objects.list"   -mcpu=cortex-m4 -T"D:\DWIN\DWIN-Project\Lesson 4\STM32\DWIN Project\STM32L476RGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="DWIN Project.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: DWIN Project.elf
+ 
+arm-none-eabi-size   DWIN\ Project.elf 
+arm-none-eabi-objdump -h -S  DWIN\ Project.elf  > "DWIN Project.list"
+arm-none-eabi-objcopy  -O binary  DWIN\ Project.elf  "DWIN Project.bin"
+   text	   data	    bss	    dec	    hex	filename
+  24724	     20	   4484	  29228	   722c	DWIN Project.elf
+Finished building: default.size.stdout
+ 
+Finished building: DWIN Project.bin
+ 
+Finished building: DWIN Project.list
+ 
+23:33:32 **** Incremental Build of configuration Debug for project DWIN Project ****
+make -j12 all 
+arm-none-eabi-gcc "../DWIN_LIB/DWIN_APP.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32L476xx -c -I../Core/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32L4xx/Include -I../Drivers/CMSIS/Include -I../DWIN_LIB -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"DWIN_LIB/DWIN_APP.d" -MT"DWIN_LIB/DWIN_APP.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "DWIN_LIB/DWIN_APP.o"
+arm-none-eabi-gcc -o "DWIN Project.elf" @"objects.list"   -mcpu=cortex-m4 -T"D:\DWIN\DWIN-Project\Lesson 4\STM32\DWIN Project\STM32L476RGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="DWIN Project.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: DWIN Project.elf
+ 
+arm-none-eabi-size   DWIN\ Project.elf 
+arm-none-eabi-objdump -h -S  DWIN\ Project.elf  > "DWIN Project.list"
+arm-none-eabi-objcopy  -O binary  DWIN\ Project.elf  "DWIN Project.bin"
+   text	   data	    bss	    dec	    hex	filename
+  24732	     20	   4484	  29236	   7234	DWIN Project.elf
+Finished building: default.size.stdout
+ 
+Finished building: DWIN Project.bin
+ 
+Finished building: DWIN Project.list
+ 
+23:34:35 **** Incremental Build of configuration Debug for project DWIN Project ****
+make -j12 all 
+arm-none-eabi-size   DWIN\ Project.elf 
+   text	   data	    bss	    dec	    hex	filename
+  24732	     20	   4484	  29236	   7234	DWIN Project.elf
+Finished building: default.size.stdout
+ 
+23:50:21 **** Incremental Build of configuration Debug for project DWIN Project ****
+make -j12 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32L476xx -c -I../Core/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32L4xx/Include -I../Drivers/CMSIS/Include -I../DWIN_LIB -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "DWIN Project.elf" @"objects.list"   -mcpu=cortex-m4 -T"D:\DWIN\DWIN-Project\Lesson 4\STM32\DWIN Project\STM32L476RGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="DWIN Project.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: DWIN Project.elf
+ 
+arm-none-eabi-size   DWIN\ Project.elf 
+arm-none-eabi-objdump -h -S  DWIN\ Project.elf  > "DWIN Project.list"
+arm-none-eabi-objcopy  -O binary  DWIN\ Project.elf  "DWIN Project.bin"
+   text	   data	    bss	    dec	    hex	filename
+  32420	     20	   4484	  36924	   903c	DWIN Project.elf
+Finished building: default.size.stdout
+ 
+Finished building: DWIN Project.bin
+ 
+Finished building: DWIN Project.list
+ 
+23:52:10 **** Incremental Build of configuration Debug for project DWIN Project ****
+make -j12 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32L476xx -c -I../Core/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32L4xx/Include -I../Drivers/CMSIS/Include -I../DWIN_LIB -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "DWIN Project.elf" @"objects.list"   -mcpu=cortex-m4 -T"D:\DWIN\DWIN-Project\Lesson 4\STM32\DWIN Project\STM32L476RGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="DWIN Project.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: DWIN Project.elf
+ 
+arm-none-eabi-size   DWIN\ Project.elf 
+arm-none-eabi-objdump -h -S  DWIN\ Project.elf  > "DWIN Project.list"
+arm-none-eabi-objcopy  -O binary  DWIN\ Project.elf  "DWIN Project.bin"
+   text	   data	    bss	    dec	    hex	filename
+  32636	     20	   4484	  37140	   9114	DWIN Project.elf
+Finished building: default.size.stdout
+ 
+Finished building: DWIN Project.bin
+ 
+Finished building: DWIN Project.list
+ 
+00:35:01 **** Incremental Build of configuration Debug for project DWIN Project ****
+make -j12 all 
+arm-none-eabi-gcc "../DWIN_LIB/DWIN_APP.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32L476xx -c -I../Core/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32L4xx/Include -I../Drivers/CMSIS/Include -I../DWIN_LIB -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"DWIN_LIB/DWIN_APP.d" -MT"DWIN_LIB/DWIN_APP.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "DWIN_LIB/DWIN_APP.o"
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32L476xx -c -I../Core/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32L4xx/Include -I../Drivers/CMSIS/Include -I../DWIN_LIB -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "DWIN Project.elf" @"objects.list"   -mcpu=cortex-m4 -T"D:\DWIN\DWIN-Project\Lesson 4\STM32\DWIN Project\STM32L476RGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="DWIN Project.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: DWIN Project.elf
+ 
+arm-none-eabi-size   DWIN\ Project.elf 
+arm-none-eabi-objdump -h -S  DWIN\ Project.elf  > "DWIN Project.list"
+arm-none-eabi-objcopy  -O binary  DWIN\ Project.elf  "DWIN Project.bin"
+   text	   data	    bss	    dec	    hex	filename
+  32420	     20	   4484	  36924	   903c	DWIN Project.elf
+Finished building: default.size.stdout
+ 
+Finished building: DWIN Project.bin
+ 
+Finished building: DWIN Project.list
+ 

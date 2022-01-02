@@ -128,7 +128,7 @@ int main(void)
 
 	  if (timer2Cnt > 24)
 	  {
-		  curveProcessDWIN();
+		  curveProcessX10DWIN();
 		  timer2Cnt = 0;
 	  }
 

@@ -125,11 +125,11 @@ int main(void)
 		  i = 0;
 	  }
 	  ledPWM();
-
 	  if (timer2Cnt > 24)
 	  {
-		  curveProcessDWIN();
-		  timer2Cnt = 0;
+	  curveProcessDWIN();
+	  //curveProcessX10DWIN();
+	  timer2Cnt = 0;
 	  }
 
     /* USER CODE END WHILE */
@@ -139,10 +139,6 @@ int main(void)
   /* USER CODE END 3 */
 }
 
-
-
-//curveOneProcessDWIN();
-//curveProcessX10DWIN();
 /**
   * @brief System Clock Configuration
   * @retval None
