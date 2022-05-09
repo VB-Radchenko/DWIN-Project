@@ -1,0 +1,57 @@
+VERSION
+8
+
+COMMSETTINGS
+0
+COM12
+COM5
+115200
+2
+63
+4
+0
+0
+
+COMMDISPLAY
+0
+
+VERSATAP
+0
+
+CHANNELALIAS
+
+
+
+SEND
+0
+Go to Settings Page
+5A A5 07 82 00 84 5A 01 00 02
+0
+5
+
+SEND
+1
+Read value from  2000-2004
+5A A5 04 83 20 00 05
+0
+5
+
+SEND
+2
+Write value in 1000-1011
+
+0
+5
+
+RECEIVE
+0
+Password Valid
+5A A5 06 83 11 00 01 0E 46
+0
+1
+COMMENT Password Valid
+1
+1
+0
+1
+
